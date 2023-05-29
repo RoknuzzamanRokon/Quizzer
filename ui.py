@@ -65,7 +65,6 @@ class Structure:
         is_right = self.quiz.check_answer("False")
         self.give_feedback(is_right)
 
-
     def give_feedback(self, is_right):
 
         if is_right:

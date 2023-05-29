@@ -1,4 +1,5 @@
 from tkinter import *
+from quiz_brain import QuizBrain
 
 THEME_COLOR = "#375362"
 
@@ -8,7 +9,8 @@ IMAGE_02 = "images/false.png"
 
 class Structure:
 
-    def __init__(self):
+    def __init__(self, quiz_brain: QuizBrain):
+        self.quiz = quiz_brain
 
         self.window = Tk()
         self.window.title("Quizzer")
@@ -23,6 +25,7 @@ class Structure:
         self.canvas = Canvas()
         self.canvas.config(width=300, height=250, bg="white")
         self.question_text = self.canvas.create_text(150, 125,
+                                                     width=280,
                                                      text="This is a simple text,just check what is happend.",
                                                      font=("Arial", 20, "italic"),
                                                      fill=THEME_COLOR)
@@ -40,4 +43,12 @@ class Structure:
         self.false_button.config(image=false_image, highlightthickness=0)
         self.false_button.grid(row=2, column=1)
 
+        self.next_question()
         self.window.mainloop()
+
+    def next_question(self):
+        q_text = self.quiz.next_question()
+        self.canvas.itemconfig(self.question_text, text=q_text)
+
+
+

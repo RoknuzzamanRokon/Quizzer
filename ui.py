@@ -34,21 +34,43 @@ class Structure:
         # Create True Button.
         self.true_button = Button()
         true_image = PhotoImage(file="images/true.png")
-        self.true_button.config(image=true_image, highlightthickness=0)
+        self.true_button.config(image=true_image, highlightthickness=0,command=self.true_pass)
         self.true_button.grid(row=2, column=0)
 
         # Create False Button.
         self.false_button = Button()
         false_image = PhotoImage(file="images/false.png")
-        self.false_button.config(image=false_image, highlightthickness=0)
+        self.false_button.config(image=false_image, highlightthickness=0, command=self.false_pass)
         self.false_button.grid(row=2, column=1)
 
         self.next_question()
         self.window.mainloop()
 
     def next_question(self):
-        q_text = self.quiz.next_question()
-        self.canvas.itemconfig(self.question_text, text=q_text)
+        self.canvas.config(bg="white")
+        if self.quiz.still_has_questions():
+            self.label.config(text=f"Score: {self.quiz.score}")
+            q_text = self.quiz.next_question()
+            self.canvas.itemconfig(self.question_text, text=q_text)
+        else:
+            self.canvas.itemconfig(self.question_text, text="Finish the Question")
+            self.true_pass.config(state="disabled")
+            self.false_pass.config(state="disabled")
+
+    def true_pass(self):
+        is_right = self.quiz.check_answer("True")
+        self.give_feedback(is_right)
+
+    def false_pass(self):
+        is_right = self.quiz.check_answer("False")
+        self.give_feedback(is_right)
 
 
+    def give_feedback(self, is_right):
+
+        if is_right:
+            self.canvas.config(bg="green")
+        else:
+            self.canvas.config(bg="red")
+        self.window.after(500, self.next_question)
 
